@@ -19,6 +19,11 @@ export interface NoteNode {
   chord: string;
 }
 
+export interface Section {
+  title: string;
+  lines: NoteNode[][];
+}
+
 export interface Song {
   artist: string;
   name: string;
@@ -27,5 +32,5 @@ export interface Song {
     notes: Note[];
   };
   chords: { [key: string]: Note[] };
-  lines: NoteNode[][];
+  sections: Section[];
 }
