@@ -14,14 +14,17 @@ type Note =
   | "Bb";
 
 export interface NoteNode {
-  note: Note;
+  note: {
+    name: Note;
+    number: number;
+  };
   word: string;
   chord: string;
 }
 
 export interface Section {
   title: string;
-  lines: NoteNode[][];
+  notes: NoteNode[];
 }
 
 export interface Song {
