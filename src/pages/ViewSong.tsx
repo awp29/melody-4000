@@ -1,80 +1,86 @@
 /** @jsxImportSource @emotion/react */
 
+import { useLocation } from "react-router-dom";
+import { Nav } from "../components/nav";
 import { NoteNode, Song } from "../types";
 
-interface Props {
-  song: Song;
-}
-
-const ViewSong: React.FC<Props> = (props) => {
-  const { song } = props;
+const ViewSong: React.FC = () => {
+  const location = useLocation();
+  // TODO: TYPE THIS CORRECTLY
+  const song = location.state.songToView as Song;
 
   return (
     <>
-      <nav
-        css={{
-          position: "fixed",
-          top: "0px",
-          width: "100%",
-          padding: "20px",
-          borderBottom: "1px solid black",
-          backgroundColor: "#f1f0ee",
-        }}
-      >
-        <div
-          css={{
-            maxWidth: "1024px",
-            width: "100%",
-            margin: "0 auto 0 auto",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <div>
-            <h1 css={{ fontWeight: "bold" }}>{song.name}</h1>
-            <h2 css={{ fontWeight: "bold", fontSize: "18px" }}>
-              {song.artist}
-            </h2>
-          </div>
+      <Nav css={{ justifyContent: "space-between", position: "fixed", top: 0 }}>
+        <div>
+          <h1 css={{ fontSize: "16px", fontWeight: "bold" }}>{song.name}</h1>
+          <h2 css={{ fontSize: "12px", fontWeight: "bold" }}>{song.artist}</h2>
+        </div>
 
-          <div css={{ display: "flex", alignItems: "center" }}>
-            <p css={{ marginRight: "20px", fontWeight: "bold" }}>
-              KEY {song.key.name}
-            </p>
+        <div css={{ display: "flex", alignItems: "center" }}>
+          <p css={{ marginRight: "20px" }}>Key {song.key.name}</p>
 
-            <div css={{ display: "flex" }}>
-              {song.key.notes.map((note, index) => {
-                return (
-                  <div
-                    key={`note-${index}`}
+          <div css={{ display: "flex" }}>
+            {song.key.notes.map((note, index) => {
+              return (
+                <div
+                  key={`note-${index}`}
+                  css={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <p
                     css={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      margin: "0px 10px",
+                      border: "1px solid black",
+                      width: "24px",
+                      height: "24px",
+                      textAlign: "center",
+                      fontSize: "14px",
                     }}
                   >
-                    <p>{numberToRomanNumeral(index)}</p>
-                    <p>{note}</p>
-                  </div>
-                );
-              })}
-            </div>
+                    {numberToRomanNumeral(index)}
+                  </p>
+                  <p
+                    css={{
+                      border: "1px solid black",
+                      width: "24px",
+                      height: "24px",
+                      textAlign: "center",
+                      fontSize: "14px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {note}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
-      </nav>
+      </Nav>
+
       <div
         css={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          marginTop: "100px",
+          marginTop: "60px",
         }}
       >
         <div css={{ marginTop: "40px" }}>
           {song.sections.map((section) => {
             return (
-              <div key={section.title} css={{ marginBottom: "80px" }}>
+              <div
+                key={section.title}
+                css={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  marginBottom: "40px",
+                }}
+              >
                 <h2
                   css={{
                     fontWeight: "bold",
@@ -110,7 +116,7 @@ const ViewSong: React.FC<Props> = (props) => {
                               css={{
                                 fontSize: "14px",
                                 backgroundColor: resonants
-                                  ? "#8DB38B"
+                                  ? "#99C24D"
                                   : "transparent",
                                 padding: "4px",
                               }}
