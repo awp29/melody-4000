@@ -1,11 +1,12 @@
 /** @jsxImportSource @emotion/react */
 
 import { useLocation } from "react-router-dom";
-import { Nav } from "../components/nav";
-import { Song } from "../types";
-import sunnyAfternoon from "../sunnyAfternoon";
+import { Nav } from "../../components/nav";
+import { Song } from "../../types";
+import sunnyAfternoon from "../../sunnyAfternoon";
 import { uniq } from "lodash";
-import { noteMap } from "../noteMap";
+import { generateNoteFrequenciesMap, pitchMap } from "../../pitchMap";
+import { DebugBackground, PitchLine } from "./components";
 
 // TODO: DON'T LIKE NOTE NODE NAME
 const NOTE_NODE_WIDTH = 80;
@@ -18,15 +19,11 @@ const ViewSong: React.FC = () => {
 
   const notes = [...song.sections[0].notes];
   const sortedNotes = notes.sort((a, b) => {
-    console.log("a", noteMap[`${a.note.name}${a.note.number}`]);
-    console.log("b", noteMap[`${a.note.name}${a.note.number}`]);
     return (
-      noteMap[`${a.note.name}${a.note.number}`] -
-      noteMap[`${b.note.name}${b.note.number}`]
+      pitchMap[`${a.note.name}${a.note.number}`] -
+      pitchMap[`${b.note.name}${b.note.number}`]
     );
   });
-
-  console.log("sortedNotes", sortedNotes);
 
   const sortedRealNotes = sortedNotes.map(
     (note) => `${note.note.name}${note.note.number}`
@@ -36,21 +33,6 @@ const ViewSong: React.FC = () => {
   const numberOfUniqueNotes = uniqueNotes.length;
 
   const noteBlockSize = NOTE_CONTAINER_HEIGHT / numberOfUniqueNotes;
-
-  let noteLinePath = "";
-  for (let i = 0; i < song.sections[0].notes.length; i++) {
-    const note = song.sections[0].notes[i];
-    const notePosition = uniqueNotes.indexOf(
-      `${note.note.name}${note.note.number}`
-    );
-
-    const y = NOTE_CONTAINER_HEIGHT - noteBlockSize * notePosition;
-    const x = NOTE_NODE_WIDTH * i + NOTE_NODE_WIDTH / 2;
-
-    noteLinePath += `${x}, ${y - 30} `;
-  }
-
-  console.log("noteLinePath", noteLinePath);
 
   return (
     <>
@@ -106,12 +88,8 @@ const ViewSong: React.FC = () => {
 
       <div css={{ marginTop: "120px", padding: "0px 20px" }}>
         <svg width="100%" height="300px">
-          <polyline
-            points={noteLinePath}
-            fill="none"
-            stroke="black"
-            strokeWidth={4}
-          />
+          <DebugBackground numberOfNotes={song.sections[0].notes.length} />
+          <PitchLine notes={song.sections[0].notes} />
 
           {song.sections[0].notes.map((note, index) => {
             const x = NOTE_NODE_WIDTH * index;

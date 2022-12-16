@@ -14,6 +14,8 @@ type Note =
   | "Bb";
 
 export interface NoteNode {
+  name: string;
+  pitch: number;
   note: {
     name: Note;
     number: number;

@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import ViewSong from "./pages/ViewSong";
+import ViewSong from "./pages/viewSong/ViewSong";
 
 const router = createBrowserRouter([
   {

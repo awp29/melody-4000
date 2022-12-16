@@ -25,6 +25,8 @@ const song: Song = {
       title: "Verse 1",
       notes: [
         {
+          name: "D",
+          pitch: 38,
           note: {
             name: "D",
             number: 3,
@@ -33,6 +35,8 @@ const song: Song = {
           chord: "Dm",
         },
         {
+          name: "D",
+          pitch: 38,
           note: {
             name: "D",
             number: 3,
@@ -41,6 +45,8 @@ const song: Song = {
           chord: "Dm",
         },
         {
+          name: "E",
+          pitch: 40,
           note: {
             name: "E",
             number: 3,
@@ -49,6 +55,8 @@ const song: Song = {
           chord: "Dm",
         },
         {
+          name: "F",
+          pitch: 41,
           note: {
             name: "F",
             number: 3,
@@ -57,6 +65,8 @@ const song: Song = {
           chord: "Dm",
         },
         {
+          name: "G",
+          pitch: 43,
           note: {
             name: "G",
             number: 3,
@@ -65,6 +75,8 @@ const song: Song = {
           chord: "Dm",
         },
         {
+          name: "A",
+          pitch: 45,
           note: {
             name: "A",
             number: 3,
@@ -73,6 +85,8 @@ const song: Song = {
           chord: "C",
         },
         {
+          name: "D",
+          pitch: 50,
           note: {
             name: "D",
             number: 4,
@@ -81,6 +95,8 @@ const song: Song = {
           chord: "C",
         },
         {
+          name: "C",
+          pitch: 48,
           note: {
             name: "C",
             number: 4,
