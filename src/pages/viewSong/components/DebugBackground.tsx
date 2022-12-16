@@ -18,7 +18,13 @@ const DebugBackground: React.FC<Props> = (props) => {
       const fill = even ? "#F8F8F8" : "	#E8E8E8";
 
       rects.push(
-        <rect x={x} width={`${NOTE_NODE_WIDTH}px`} height="100%" fill={fill} />
+        <rect
+          key={i}
+          x={x}
+          width={`${NOTE_NODE_WIDTH}px`}
+          height="100%"
+          fill={fill}
+        />
       );
     }
 

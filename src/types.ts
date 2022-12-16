@@ -13,13 +13,19 @@ type Note =
   | "B"
   | "Bb";
 
+export enum NoteType {
+  inChord,
+  inKey,
+  outsideKey,
+}
+
+export type ScaleDegree = "i" | "ii" | "iii" | "iv" | "v" | "vi" | "vii";
+
 export interface NoteNode {
   name: string;
   pitch: number;
-  note: {
-    name: Note;
-    number: number;
-  };
+  type: NoteType;
+  degree: ScaleDegree;
   word: string;
   chord: string;
 }

@@ -36,7 +36,8 @@ const PitchLine: React.FC<Props> = (props) => {
       points={calculatePoints()}
       fill="none"
       stroke="black"
-      strokeWidth={4}
+      strokeWidth={2}
+      shapeRendering="optimizeQuality"
     />
   );
 };

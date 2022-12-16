@@ -2,11 +2,9 @@
 
 import { useLocation } from "react-router-dom";
 import { Nav } from "../../components/nav";
-import { Song } from "../../types";
 import sunnyAfternoon from "../../sunnyAfternoon";
-import { uniq } from "lodash";
-import { generateNoteFrequenciesMap, pitchMap } from "../../pitchMap";
-import { DebugBackground, PitchLine } from "./components";
+import { getUniquePitches } from "../../utils/calculatePitchMap";
+import { DebugBackground, Note, PitchLine } from "./components";
 
 // TODO: DON'T LIKE NOTE NODE NAME
 const NOTE_NODE_WIDTH = 80;
@@ -16,23 +14,6 @@ const ViewSong: React.FC = () => {
   const location = useLocation();
   // TODO: TYPE THIS CORRECTLY
   const song = sunnyAfternoon; //location.state.songToView as Song;
-
-  const notes = [...song.sections[0].notes];
-  const sortedNotes = notes.sort((a, b) => {
-    return (
-      pitchMap[`${a.note.name}${a.note.number}`] -
-      pitchMap[`${b.note.name}${b.note.number}`]
-    );
-  });
-
-  const sortedRealNotes = sortedNotes.map(
-    (note) => `${note.note.name}${note.note.number}`
-  );
-
-  const uniqueNotes = uniq(sortedRealNotes);
-  const numberOfUniqueNotes = uniqueNotes.length;
-
-  const noteBlockSize = NOTE_CONTAINER_HEIGHT / numberOfUniqueNotes;
 
   return (
     <>
@@ -86,66 +67,85 @@ const ViewSong: React.FC = () => {
         </div>
       </Nav>
 
-      <div css={{ marginTop: "120px", padding: "0px 20px" }}>
-        <svg width="100%" height="300px">
-          <DebugBackground numberOfNotes={song.sections[0].notes.length} />
-          <PitchLine notes={song.sections[0].notes} />
+      <div css={{ marginTop: "80px", padding: "0px 20px" }}>
+        {song.sections.map((section) => {
+          const uniquePitches = getUniquePitches(section.notes);
 
-          {song.sections[0].notes.map((note, index) => {
-            const x = NOTE_NODE_WIDTH * index;
-            const center = x + NOTE_NODE_WIDTH / 2;
-            const even = index % 2 === 0;
-            const fill = even ? "pink" : "#f0d6da";
-
-            const notePosition = uniqueNotes.indexOf(
-              `${note.note.name}${note.note.number}`
-            );
-            const noteY = NOTE_CONTAINER_HEIGHT - noteBlockSize * notePosition;
-
-            const isNoteInChord = song.chords[note.chord].includes(
-              note.note.name
-            );
-
-            return (
-              <g key={index}>
-                {/* <rect
-                  x={x}
-                  width={`${NOTE_NODE_WIDTH}px`}
-                  height="100%"
-                  fill={fill}
-                /> */}
-
-                <g width="100%" height="200px">
-                  {/* <rect
-                    x={x}
-                    width={`${NOTE_NODE_WIDTH}px`}
-                    height={`${NOTE_CONTAINER_HEIGHT}px`}
-                    fill={fill}
+          return (
+            <div
+              key={`section-${section.title}`}
+              css={{ marginBottom: "40px" }}
+            >
+              <h2
+                css={{
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                  marginBottom: "20px",
+                }}
+              >
+                {section.title}
+              </h2>
+              <div
+                css={{
+                  width: "100%",
+                  overflow: "auto",
+                }}
+              >
+                <svg
+                  width={`${NOTE_NODE_WIDTH * section.notes.length}`}
+                  height="300px"
+                >
+                  {/* <DebugBackground
+                    numberOfNotes={song.sections[0].notes.length}
                   /> */}
-                </g>
+                  <PitchLine notes={song.sections[0].notes} />
 
-                <rect
-                  x={center - 19}
-                  y={noteY - 15}
-                  width="40px"
-                  height="20px"
-                  fill={isNoteInChord ? "green" : "white"}
-                />
-                <text x={center} y={noteY} textAnchor="middle">
-                  {note.note.name} {note.note.number}
-                </text>
+                  {section.notes.map((note, index) => {
+                    const x = NOTE_NODE_WIDTH * index;
+                    const center = x + NOTE_NODE_WIDTH / 2;
 
-                <text x={center} y={300 - 50} textAnchor="middle">
-                  {note.word}
-                </text>
+                    const maxNumberOfUniqueNotes = uniquePitches.length;
+                    const notePosition = uniquePitches.indexOf(note.pitch);
+                    const noteY =
+                      NOTE_CONTAINER_HEIGHT -
+                      (NOTE_CONTAINER_HEIGHT / maxNumberOfUniqueNotes) *
+                        notePosition;
 
-                <text x={center} y={300 - 20} textAnchor="middle">
-                  {note.chord}
-                </text>
-              </g>
-            );
-          })}
-        </svg>
+                    return (
+                      <g key={index}>
+                        <Note
+                          x={center}
+                          y={noteY}
+                          name={note.name}
+                          type={note.type}
+                          degree={note.degree}
+                        />
+
+                        <text
+                          css={{ fontWeight: "bold" }}
+                          x={center}
+                          y={300 - 50}
+                          textAnchor="middle"
+                        >
+                          {note.word}
+                        </text>
+
+                        <text
+                          css={{ fontSize: "13px" }}
+                          x={center}
+                          y={300 - 20}
+                          textAnchor="middle"
+                        >
+                          {note.chord}
+                        </text>
+                      </g>
+                    );
+                  })}
+                </svg>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </>
   );
